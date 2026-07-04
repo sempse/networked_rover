@@ -1,13 +1,23 @@
 #include <iostream>
 using namespace std;
 
-#include <logger.h> // Logger Levels
+#include "logger.h"// Logger Levels
 
+// Improvements:
+// Remove cout and add gpio usage.
 
 class Logger{
     private:
         static bool logon;
+    protected:
+    // No one can create this object except itself
+        Logger(){};
     public:
+        static Logger& get_instance(){
+            // 
+            static Logger _instance;
+            return _instance;
+        }
         void enablelog(bool enable){
             // Static to have in memory the value of logon
             if (enable) {
@@ -36,12 +46,9 @@ class Logger{
 
 bool Logger::logon = false;
 
-
 // Sample Usage
 int main() {
-    
-    Logger log;
-
+    Logger& log = Logger::get_instance();
     log.enablelog(true);
     log.logmessage(LoggerLevel::Debug, "Debugging Already?");
     log.enablelog(false);
@@ -51,4 +58,3 @@ int main() {
 
     return 0;
 }
-
